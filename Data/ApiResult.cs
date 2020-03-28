@@ -13,7 +13,15 @@ namespace WorldCities.Data
         /// <summary>
         /// Private constructor called by the CreateAsync method
         /// </summary>
-        private ApiResult(List<T> data, int count, int pageIndex, int pageSize, string sortColumn, string sortOrder)
+        private ApiResult(
+            List<T> data,
+            int count,
+            int pageIndex,
+            int pageSize,
+            string sortColumn,
+            string sortOrder,
+            string filterColumn,
+            string filterQuery)
         {
             Data = data;
             TotalCount = count;
@@ -21,27 +29,40 @@ namespace WorldCities.Data
             PageSize = pageSize;
             SortColumn = sortColumn;
             SortOrder = sortOrder;
+            FilterColumn = filterColumn;
+            FilterQuery = filterQuery;
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
         }
 
         #region Methods
         /// <summary>
-        /// Pages and/or sorts a IQueryable source.
+        /// Pages, sorts and/or filters a IQueryable source.
         /// </summary>
         /// <param name="source">An IQueryable source of generic type</param>
         /// <param name="pageIndex">Zero-based current page index</param>
         /// <param name="pageSize">The actual size of each page</param>
         /// <param name="sortColumn">The sorting column name</param>
         /// <param name="sortOrder">The sorting order ("ASC" or "DESC")</param>
-        /// <returns>A object containing the paged/sorted result and all the relevant paging/sorting navigation info.</returns>
+        /// <param name="filterColumn">The filtering column name</param>
+        /// <param name="filterQuery">The filtering query (value to lookup)</param>
+        /// <returns>A object containing the paged/sorted/filtered result and all the relevant paging/sorting/filtering navigation info.</returns>
         public static async Task<ApiResult<T>> CreateAsync(
             IQueryable<T> source,
             int pageIndex,
             int pageSize,
             string sortColumn = null,
-            string sortOrder = null)
+            string sortOrder = null,
+            string filterColumn = null,
+            string filterQuery = null)
         {
             var count = await source.CountAsync();
+
+            if (!string.IsNullOrEmpty(filterColumn) &&
+                !string.IsNullOrEmpty(filterQuery) &&
+                IsValidProperty(filterColumn))
+            {
+                source = source.Where($"{filterColumn}.Contains(@0)", filterQuery);
+            }
 
             if (!string.IsNullOrEmpty(sortColumn) &&
                 IsValidProperty(sortColumn))
@@ -64,7 +85,9 @@ namespace WorldCities.Data
                 pageIndex,
                 pageSize,
                 sortColumn,
-                sortOrder);
+                sortOrder,
+                filterColumn,
+                filterQuery);
         }
 
         /// <summary>
@@ -112,6 +135,16 @@ namespace WorldCities.Data
         /// Sorting order ("ASC", "DESC" or null if none set)
         /// </summary>
         public string SortOrder { get; }
+
+        /// <summary>
+        /// Filter column name (or null if none set)
+        /// </summary>
+        public string FilterColumn { get; }
+
+        /// <summary>
+        /// Filter Query string (to be used within the given FilterColumn)
+        /// </summary>
+        public string FilterQuery { get; }
 
         /// <summary>
         /// Total pages count.

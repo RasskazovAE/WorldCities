@@ -20,6 +20,8 @@ export class CitiesComponent implements OnInit {
   private defaultPageSize: number = 10;
   public defaultSortColumn: string = "name";
   public defaultSortOrder: string = "asc";
+  public defaultFilterColumn: string = "name";
+  private filterQuery: string = null;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -33,10 +35,12 @@ export class CitiesComponent implements OnInit {
     this.loadData();
   }
 
-  loadData() {
+  loadData(query: string = null) {
     var pageEvent = new PageEvent();
     pageEvent.pageIndex = this.defaultPageIndex;
     pageEvent.pageSize = this.defaultPageSize;
+    if (query)
+      this.filterQuery = query;
     this.getData(pageEvent);
   }
 
@@ -51,6 +55,12 @@ export class CitiesComponent implements OnInit {
       .set("sortOrder", (this.sort)
         ? this.sort.direction
         : this.defaultSortOrder);
+
+    if (this.filterQuery) {
+      params = params
+        .set("filterColumn", this.defaultFilterColumn)
+        .set("filterQuery", this.filterQuery);
+    }
 
     this.http.get<ApiResult<City>>(url, { params })
       .subscribe(result => {

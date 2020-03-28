@@ -28,9 +28,18 @@ namespace WorldCities.Controllers
             int pageIndex = 0,
             int pageSize = 10,
             string sortColumn = null,
-            string sortOrder = null)
+            string sortOrder = null,
+            string filterColumn = null,
+            string filterQuery = null)
         {
-            return await ApiResult<City>.CreateAsync(_context.Cities, pageIndex, pageSize, sortColumn, sortOrder);
+            return await ApiResult<City>.CreateAsync(
+                _context.Cities,
+                pageIndex,
+                pageSize,
+                sortColumn,
+                sortOrder,
+                filterColumn,
+                filterQuery);
         }
 
         // GET: api/Cities/5
