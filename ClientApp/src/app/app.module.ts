@@ -29,6 +29,7 @@ import { CityEditComponent } from './cities/city-edit/city-edit.component';
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'cities', component: CitiesComponent },
+      { path: 'city', component: CityEditComponent },
       { path: 'city/:id', component: CityEditComponent },
       { path: 'countries', component: CountriesComponent }
     ]),

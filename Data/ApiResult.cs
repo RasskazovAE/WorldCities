@@ -68,9 +68,9 @@ namespace WorldCities.Data
                 IsValidProperty(sortColumn))
             {
                 sortOrder = !string.IsNullOrEmpty(sortOrder) &&
-                            sortOrder.ToUpper() == "ASC"
-                            ? "ASC"
-                            : "DESC";
+                            sortOrder.ToUpper() == "DESC"
+                            ? "DESC"
+                            : "ASC";
                 source = source.OrderBy($"{sortColumn} {sortOrder}");
             }
 
