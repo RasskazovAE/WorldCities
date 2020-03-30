@@ -64,7 +64,7 @@ export class CountryEditComponent extends BaseFormComponent implements OnInit {
       // EDIT MODE
 
       // fetch the country from the server
-      let url = this.baseUrl + "api/countries" + this.id;
+      let url = this.baseUrl + "api/countries/" + this.id;
       this.http.get<Country>(url)
         .subscribe(result => {
           this.country = result;
