@@ -92,7 +92,7 @@ export class CityEditComponent extends BaseFormComponent implements OnInit {
     city.name = this.form.get("name").value;
     city.lat = +this.form.get("lat").value;
     city.lon = +this.form.get("lon").value;
-    city.countryId = +this.form.get('countryId').valid;
+    city.countryId = +this.form.get('countryId').value;
 
     if (this.id) {
       // EDIT MODE

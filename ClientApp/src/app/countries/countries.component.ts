@@ -14,7 +14,7 @@ import { City } from '../cities/city';
   styleUrls: ['./countries.component.css']
 })
 export class CountriesComponent implements OnInit {
-  public displayedColumns: string[] = ['id', 'name', 'iso2', 'iso3'];
+  public displayedColumns: string[] = ['id', 'name', 'iso2', 'iso3', 'totCities'];
   public countries: MatTableDataSource<Country>;
 
   private defaultPageIndex: number = 0;
@@ -31,44 +31,44 @@ export class CountriesComponent implements OnInit {
     private http: HttpClient,
     @Inject('BASE_URL') private baseUrl: string) { }
 
-    ngOnInit(): void {
-      this.loadData();
+  ngOnInit(): void {
+    this.loadData();
+  }
+
+  loadData(query: string = null) {
+    var pageEvent = new PageEvent();
+    pageEvent.pageIndex = this.defaultPageIndex;
+    pageEvent.pageSize = this.defaultPageSize;
+    if (query)
+      this.filterQuery = query;
+    this.getData(pageEvent);
+  }
+
+  getData(event: PageEvent) {
+    var url = this.baseUrl + 'api/Countries';
+    var params = new HttpParams()
+      .set("pageIndex", event.pageIndex.toString())
+      .set("pageSize", event.pageSize.toString())
+      .set("sortColumn", (this.sort)
+        ? this.sort.active
+        : this.defaultSortColumn)
+      .set("sortOrder", (this.sort)
+        ? this.sort.direction
+        : this.defaultSortOrder);
+
+    if (this.filterQuery) {
+      params = params
+        .set("filterColumn", this.defaultFilterColumn)
+        .set("filterQuery", this.filterQuery);
     }
 
-    loadData(query: string = null) {
-      var pageEvent = new PageEvent();
-      pageEvent.pageIndex = this.defaultPageIndex;
-      pageEvent.pageSize = this.defaultPageSize;
-      if (query)
-        this.filterQuery = query;
-      this.getData(pageEvent);
-    }
-
-    getData(event: PageEvent) {
-      var url = this.baseUrl + 'api/Countries';
-      var params = new HttpParams()
-        .set("pageIndex", event.pageIndex.toString())
-        .set("pageSize", event.pageSize.toString())
-        .set("sortColumn", (this.sort)
-          ? this.sort.active
-          : this.defaultSortColumn)
-        .set("sortOrder", (this.sort)
-          ? this.sort.direction
-          : this.defaultSortOrder);
-
-      if (this.filterQuery) {
-        params = params
-          .set("filterColumn", this.defaultFilterColumn)
-          .set("filterQuery", this.filterQuery);
-      }
-
-      this.http.get<ApiResult<Country>>(url, { params })
-        .subscribe(result => {
-          this.paginator.length = result.totalCount;
-          this.paginator.pageIndex = result.pageIndex;
-          this.paginator.pageSize = result.pageSize;
-          this.countries = new MatTableDataSource<Country>(result.data);
-        }, error => console.error(error));
-    }
+    this.http.get<ApiResult<Country>>(url, { params })
+      .subscribe(result => {
+        this.paginator.length = result.totalCount;
+        this.paginator.pageIndex = result.pageIndex;
+        this.paginator.pageSize = result.pageSize;
+        this.countries = new MatTableDataSource<Country>(result.data);
+      }, error => console.error(error));
+  }
 
 }
