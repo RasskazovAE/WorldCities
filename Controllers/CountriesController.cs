@@ -109,6 +109,23 @@ namespace WorldCities.Controllers
             return country;
         }
 
+        [HttpPost]
+        [Route("IsDupeField")]
+        public async Task<bool> IsDupeField(int countryId, string fieldName, string fieldValue)
+        {
+            switch (fieldName.ToLower())
+            {
+                case "name":
+                    return await _context.Countries.AnyAsync(e => e.Name == fieldValue && e.Id != countryId);
+                case "iso2":
+                    return await _context.Countries.AnyAsync(e => e.ISO2 == fieldValue && e.Id != countryId);
+                case "iso3":
+                    return await _context.Countries.AnyAsync(e => e.ISO3 == fieldValue && e.Id != countryId);
+                default:
+                    return false;
+            }
+        }
+
         private bool CountryExists(int id)
         {
             return _context.Countries.Any(e => e.Id == id);

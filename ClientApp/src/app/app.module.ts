@@ -12,6 +12,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularMaterialModule } from './angular-material.module';
 import { CountriesComponent } from './countries/countries.component';
 import { CityEditComponent } from './cities/city-edit/city-edit.component';
+import { CountryEditComponent } from './countries/country-edit/country-edit.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { CityEditComponent } from './cities/city-edit/city-edit.component';
     HomeComponent,
     CitiesComponent,
     CityEditComponent,
-    CountriesComponent
+    CountriesComponent,
+    CountryEditComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -31,7 +33,9 @@ import { CityEditComponent } from './cities/city-edit/city-edit.component';
       { path: 'cities', component: CitiesComponent },
       { path: 'city', component: CityEditComponent },
       { path: 'city/:id', component: CityEditComponent },
-      { path: 'countries', component: CountriesComponent }
+      { path: 'countries', component: CountriesComponent },
+      { path: 'country', component: CountryEditComponent },
+      { path: 'country/:id', component: CountryEditComponent }
     ]),
     BrowserAnimationsModule,
     AngularMaterialModule,
