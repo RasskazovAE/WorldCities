@@ -8,7 +8,7 @@
       <label for="name">Country name:</label>
       <br />
       <input type="text" id="name" formControlName="name" required placeholder="Country name..." class="form-control" />
-      <div *ngIf="form.get('name').invalid && (form.get('name').dirty || form.get('name').touched)"
+      <div *ngIf="hasError('name')"
         class="invalid-feedback">
         <div *ngIf="form.get('name').errors?.required">Name is required.</div>
         <div *ngIf="form.get('name').errors?.isDupeField">Name already exists: please choose another.</div>
@@ -19,7 +19,7 @@
       <label for="iso2">ISO 3166-1 ALPHA-2 Country Code (2 letters):</label>
       <br />
       <input type="text" id="iso2" formControlName="iso2" required placeholder="2 letters country code..." class="form-control" />
-      <div *ngIf="form.get('iso2').invalid && (form.get('iso2').dirty || form.get('iso2').touched)"
+      <div *ngIf="hasError('iso2')"
         class="invalid-feedback">
         <div *ngIf="form.get('iso2').errors?.required">ISO 3166-1 ALPHA-2 Country Code is required.</div>
         <div *ngIf="form.get('iso2').errors?.pattern">ISO 3166-1 ALPHA-2 Country Code requires 2 letters.</div>
@@ -31,7 +31,7 @@
       <label for="iso3">ISO 3166-1 ALPHA-3 Country Code (3 letters):</label>
       <br />
       <input type="text" id="iso3" formControlName="iso3" required placeholder="3 letters country code..." class="form-control" />
-      <div *ngIf="form.get('iso3').invalid && (form.get('iso3').dirty || form.get('iso3').touched)"
+      <div *ngIf="hasError('iso3')"
         class="invalid-feedback">
         <div *ngIf="form.get('iso3').errors?.required">ISO 3166-1 ALPHA-3 Country Code is required.</div>
         <div *ngIf="form.get('iso3').errors?.pattern">ISO 3166-1 ALPHA-3 Country Code requires 3 letters.</div>

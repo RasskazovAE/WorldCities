@@ -9,22 +9,22 @@ import { City } from '../city';
 import { Country } from 'src/app/countries/country';
 import { ApiResult } from 'src/app/Model/apiResult';
 
+import { BaseFormComponent } from 'src/app/base.form.component';
+
 @Component({
   selector: 'app-city-edit',
   templateUrl: './city-edit.component.html',
   styleUrls: ['./city-edit.component.css']
 })
-export class CityEditComponent implements OnInit {
+export class CityEditComponent extends BaseFormComponent implements OnInit {
   //the view title
-  public title: string;
-  //the form model
-  public form: FormGroup;
+  title: string;
   //the city object to edit or create
-  public city: City;
+  city: City;
   //the city object id, as fetched from the active route:
   // It's NULL when we're adding a new city,
   // and not nNULL when we're editing an existing one.
-  public id?: number;
+  id?: number;
   //the countries array for the select
   countries: Country[];
 
@@ -33,6 +33,7 @@ export class CityEditComponent implements OnInit {
     private router: Router,
     private http: HttpClient,
     @Inject('BASE_URL') private baseUrl: string) {
+    super();
   }
 
   ngOnInit(): void {
@@ -56,7 +57,7 @@ export class CityEditComponent implements OnInit {
       // EDIT MODE
 
       //fetch the city from the server
-      var url = this.baseUrl + "api/cities/" + this.id;
+      let url = this.baseUrl + "api/cities/" + this.id;
       this.http.get<City>(url)
         .subscribe(result => {
           this.city = result;
@@ -74,8 +75,8 @@ export class CityEditComponent implements OnInit {
   }
 
   loadCountries() {
-    var url = this.baseUrl + "api/countries";
-    var params = new HttpParams()
+    let url = this.baseUrl + "api/countries";
+    let params = new HttpParams()
       .set("pageSize", "9999")
       .set("sortColumn", "name");
 
@@ -86,7 +87,7 @@ export class CityEditComponent implements OnInit {
   }
 
   onSubmit() {
-    var city = (this.id) ? this.city : <City>{};
+    let city = (this.id) ? this.city : <City>{};
 
     city.name = this.form.get("name").value;
     city.lat = +this.form.get("lat").value;
@@ -96,7 +97,7 @@ export class CityEditComponent implements OnInit {
     if (this.id) {
       // EDIT MODE
 
-      var url = this.baseUrl + "api/cities/" + this.city.id;
+      let url = this.baseUrl + "api/cities/" + this.city.id;
       this.http.put<City>(url, city)
         .subscribe(result => {
           console.log("City " + city.id + " has been updates.");
@@ -108,7 +109,7 @@ export class CityEditComponent implements OnInit {
     else {
       // ADD NEW MODE
 
-      var url = this.baseUrl + "api/cities/";
+      let url = this.baseUrl + "api/cities/";
       this.http.post<City>(url, city)
         .subscribe(result => {
           console.log("City " + city.id + " has been created.");
@@ -121,14 +122,14 @@ export class CityEditComponent implements OnInit {
 
   isDupeCity(): AsyncValidatorFn {
     return (control: AbstractControl): Observable<{ [key: string]: any } | null> => {
-      var city = <City>{};
+      let city = <City>{};
       city.id = (this.id) ? this.id : 0;
       city.name = this.form.get('name').value;
       city.lat = +this.form.get('lat').value;
       city.lon = +this.form.get('lon').value;
       city.countryId = +this.form.get('countryId').value;
 
-      var url = this.baseUrl + "api/cities/isDupeCity";
+      let url = this.baseUrl + "api/cities/isDupeCity";
       return this.http.post<boolean>(url, city).pipe(map(result => {
         return (result ? { isDupeCity: true } : null);
       }))
