@@ -27,6 +27,7 @@
       <div *ngIf="hasError('lat')"
         class="invalid-feedback">
         <div *ngIf="form.get('lat').errors?.required">Latitude is required.</div>
+        <div *ngIf="form.get('lat').errors?.pattern">Latitude requires a positive or negative number with 0-4 decimal values.</div>
       </div>
     </div>
 
@@ -37,6 +38,7 @@
       <div *ngIf="hasError('lon')"
         class="invalid-feedback">
         <div *ngIf="form.get('lon').errors?.required">Longitude is required.</div>
+        <div *ngIf="form.get('lon').errors?.pattern">Latitude requires a positive or negative number with 0-4 decimal values.</div>
       </div>
     </div>
 
