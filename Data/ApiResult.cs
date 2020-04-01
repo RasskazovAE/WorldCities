@@ -77,6 +77,14 @@ namespace WorldCities.Data
             source = source
                 .Skip(pageIndex * pageSize)
                 .Take(pageSize);
+
+            // retrieve the SQL query (for debug purpose)
+#if DEBUG
+            {
+                var sql = source.ToSql();
+            }
+#endif
+
             var data = await source.ToListAsync();
 
             return new ApiResult<T>(
@@ -103,7 +111,7 @@ namespace WorldCities.Data
                 throw new NotSupportedException($"ERROR: Property '{propertyName}' does not exist.");
             return prop != null;
         }
-        #endregion
+#endregion
 
         /// <summary>
         /// The data result.

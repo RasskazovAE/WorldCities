@@ -29,6 +29,9 @@ export class CityEditComponent extends BaseFormComponent implements OnInit {
   //the countries array for the select
   countries: Country[];
 
+  //Activity Log (for debugging purpose)
+  activityLog: string = '';
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -44,6 +47,29 @@ export class CityEditComponent extends BaseFormComponent implements OnInit {
       lon: new FormControl('', [Validators.required, Validators.pattern('^[-]?[0-9]+(\.[0-9]{1,4})?$')]),
       countryId: new FormControl('', Validators.required)
     }, null, this.isDupeCity());
+
+    // react to form changes
+    this.form.valueChanges
+      .subscribe(result => {
+        if (!this.form.dirty) {
+          this.log("Form Model has been loaded.");
+        }
+        else {
+          this.log("Form was updated by the user.");
+        }
+      })
+
+    // react to changes in the form.name control
+    this.getControl('name')!.valueChanges
+      .subscribe(result => {
+        if (!this.form.dirty) {
+          this.log("Name has been loaded with initial values.");
+        }
+        else {
+          this.log("Name was updated by the user.");
+        }
+      })
+
     this.loadData();
   }
 
@@ -127,5 +153,9 @@ export class CityEditComponent extends BaseFormComponent implements OnInit {
           return (result ? { isDupeCity: true } : null);
         }));
     }
+  }
+
+  log(message: string) {
+    this.activityLog += "[" + new Date().toLocaleString() + "] " + message + "<br/>";
   }
 }
