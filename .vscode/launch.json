@@ -10,9 +10,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/bin/Debug/netcoreapp3.1/WorldCities.dll",
+            "program": "${workspaceFolder}/WorldCities/bin/Debug/netcoreapp3.1/WorldCities.dll",
             "args": [],
-            "cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/WorldCities",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
@@ -23,8 +23,9 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/Views"
-            }
+                "/Views": "${workspaceFolder}/WorldCities/Views"
+            },
+            "requireExactSource": true
         },
         {
             "name": "Launch localhost",
@@ -32,7 +33,7 @@
             "request": "launch",
             "reAttach": true,
             "url": "https://localhost:5001/index.html",
-            "webRoot": "${workspaceFolder}"
+            "webRoot": "${workspaceFolder}/WorldCities"
         },
         {
             "name": ".NET Core Attach",

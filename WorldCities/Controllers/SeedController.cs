@@ -66,7 +66,7 @@ namespace WorldCities.Controllers
                 };
 
                 // insert the admin user into the DB
-                await _userManager.CreateAsync(user_Admin, "Q1w2e3r4");
+                var result = await _userManager.CreateAsync(user_Admin, "Q1w2e3r4");
 
                 // assing the "RegisteredUser" and "Administrator" roles
                 await _userManager.AddToRoleAsync(user_Admin, role_RegisteredUser);
